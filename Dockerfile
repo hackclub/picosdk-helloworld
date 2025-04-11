@@ -28,13 +28,19 @@ RUN git clone https://github.com/raspberrypi/pico-sdk.git && \
 ENV PICO_SDK_PATH=/pico/pico-sdk
 
 # Create a non-root user
-RUN useradd -m -s /bin/bash pico
-RUN chown -R pico:pico /pico
+RUN useradd -m -s /bin/bash pico && \
+    chown -R pico:pico /pico
+
+# Switch to non-root user
 USER pico
 
-# Set up entrypoint script
-COPY --chown=pico:pico docker-entrypoint.sh /pico/
+# Create project directory
+RUN mkdir -p /pico/project
+
+# Copy entrypoint script
+COPY --chown=pico:pico docker-entrypoint.sh /pico/docker-entrypoint.sh
 RUN chmod +x /pico/docker-entrypoint.sh
 
+WORKDIR /pico/project
 ENTRYPOINT ["/pico/docker-entrypoint.sh"]
 CMD ["bash"] 

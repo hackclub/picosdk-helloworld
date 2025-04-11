@@ -8,6 +8,12 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
+# Get the absolute path of the current directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Clean up any existing build directory
+rm -rf "${SCRIPT_DIR}/build"
+
 # Build the Docker image if it doesn't exist
 if ! docker image inspect pico-build &> /dev/null; then
     echo "Building Docker image..."
@@ -16,6 +22,6 @@ fi
 
 # Run the build in Docker
 echo "Building project..."
-docker run --rm -v "$(pwd):/pico/project" pico-build build
+docker run --rm -v "${SCRIPT_DIR}:/pico/project" pico-build build
 
 echo "Build complete! The compiled files are in the 'build' directory." 

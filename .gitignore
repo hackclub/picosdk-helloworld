@@ -27,4 +27,7 @@ Thumbs.db
 *.uf2
 *.dis
 *.map
-*.lst 
+*.lst
+
+# Docker
+.docker/ 
